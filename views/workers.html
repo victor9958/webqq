@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天室简单测试</title>
+</head>
+<body>
+
+
+请输入要求和的数：<input type="text" id="num"><br>
+<button onclick="caculate()">计算</button>
+
+<script type="text/javascript">
+    //1.创建计算的子线程
+    var worker = new Worker("worker1.js");
+    function caculate(){
+        var num = parseInt(document.querySelector('#num').value,10);
+        //2.将数据传递给子线程
+        worker.postMessage(num);
+    }
+
+    //3.从子线程接收处理结果并展示
+    worker.onmessage = function(event){
+        alert('总和为：'+ event.data);
+    }
+
+    onmessage = function(event){
+        var result =0,
+                num  = event.data;
+
+        for(var i = 1; i < num ;i ++){
+            result += i;
+        }
+        //向主线程返回消息
+        postMessage(result);
+    }
+</script>
+
+</body>
+</html>
